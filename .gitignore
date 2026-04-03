@@ -3,3 +3,8 @@
 
 # Ignora autoguardados temporales de MATLAB
 *.asv
+
+# Ignora los archivos .log creados para errores y salidas de la función acumula_datos_diario
+matlab_errores.log
+matlab_salida.log
+
