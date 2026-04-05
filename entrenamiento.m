@@ -5,7 +5,9 @@
 % Esta función se encarga del proceso de entrenamiento del modelo,
 % generando ademas un archivo Modelo.mat con cual se realizaran las 
 % correspondientes predicciones.
-%
+% 
+% OJO: Como las predicciones que haremos seran a las 48 horas próximas
+% entrenaremos al modelo con ello, por ejemplo, 
 % FUNCIONAMIENTO:
 % - Obtiene los datos recopilados en historico.txt
 % - 
