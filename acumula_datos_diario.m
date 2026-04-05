@@ -45,7 +45,7 @@ function acumula_datos_diario()
         
         % 3. OBTENER PREDICCIONES OPEN-METEO (Ajustado a hora de Madrid)
         disp('2. Descargando predicciones (Open-Meteo)...');
-        url_om = sprintf('https://api.open-meteo.com/v1/forecast?latitude=%f&longitude=%f&hourly=temperature_2m,windspeed_10m,precipitation&forecast_days=2&timezone=Europe/Madrid', lat, lon);        
+        url_om = sprintf('https://api.open-meteo.com/v1/forecast?latitude=%f&longitude=%f&hourly=temperature_2m,windspeed_10m,precipitation&forecast_days=3&timezone=Europe/Madrid', lat, lon);        
         %Ignoramos el certificado de seguridad
         opciones_om = weboptions('CertificateFilename', '');
         prediccion_om = webread(url_om, opciones_om);
