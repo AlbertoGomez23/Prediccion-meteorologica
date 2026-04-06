@@ -29,25 +29,16 @@
 % -------------------------------------------------------------------------
 
 function entrenamiento()
-    % =================================================================
-    % 1. Lectura de datos de historico.txt
-    % =================================================================
-    fid = -1;
-    try
-        fid = fopen('historico.txt', 'r');
-        if fid == -1
-            error('No se pudo abrir el archivo: historico.txt')
-        end
+    disp('Iniciando el proceso de entrenamiento...');
 
-        % Si el fichero se abrio correctamente ......
-        
-        % Extraemos todas las temperaturas
-        
-        
-    catch e
-        fprintf('Error: %s\n', e.message);
-        if fid ~= -1
-            fclose(fid);   % cerrar si quedó abierto
+    try
+        % 1. LECTURA DEL ARCHIVO
+        % Usamos readlines para leer todo el archivo de golpe
+        if ~isfile('historico.txt')
+            error('No se encuentra el archivo historico.txt en esta carpeta.');
         end
+        lineas = readlines('historico.txt');
+    catch e
+        fprintf('\n[ERROR EN ENTRENAMIENTO]: %s\n', e.message);
     end
 end
