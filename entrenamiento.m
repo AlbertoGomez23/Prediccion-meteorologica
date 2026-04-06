@@ -40,7 +40,9 @@ function entrenamiento()
         end
 
         % Si el fichero se abrio correctamente ......
-        % Leer el archivo y obtener todos los datos necesarios
+        
+        % Extraemos todas las temperaturas
+        
         
     catch e
         fprintf('Error: %s\n', e.message);
