@@ -10,3 +10,4 @@ matlab_salida.log
 
 # Ignora estos archivos que no son de la practica
 visualizacionDATOS.m
+Modelo.mat
