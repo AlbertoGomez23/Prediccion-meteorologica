@@ -114,6 +114,40 @@ function entrenamiento()
             Y_prec(i, 1) = [valores_reales(3)];
         end
 
+        % -----------------------------------------------------------------
+        % LIMPIEZA DE VALORES NULOS (NaNs)
+        % Descartamos (fila) completa si hay algún NaN en X o en Y por
+        % variable, ya que para cada variable tenemos un modelo.
+        % Nunca se pone a 0, porque 0ºC o 0km/h son valores reales que
+        % confundirían al modelo.
+        % -----------------------------------------------------------------        
+        
+        % Creamos máscaras lógicas: ~any(isnan(matriz), 2) significa: 
+        % "Quédate solo con las filas donde NO haya NINGÚN NaN"
+        
+        % 1. Limpiamos Temperatura
+        filas_validas_temp = ~any(isnan([X_temp, Y_temp]), 2);
+        X_temp = X_temp(filas_validas_temp, :);
+        Y_temp = Y_temp(filas_validas_temp, :);
+        
+        % 2. Limpiamos Viento
+        filas_validas_viento = ~any(isnan([X_viento, Y_viento]), 2);
+        X_viento = X_viento(filas_validas_viento, :);
+        Y_viento = Y_viento(filas_validas_viento, :);
+        
+        % 3. Limpiamos Precipitación
+        filas_validas_prec = ~any(isnan([X_prec, Y_prec]), 2);
+        X_prec = X_prec(filas_validas_prec, :);
+        Y_prec = Y_prec(filas_validas_prec, :);
+
+        % Mostramos cuántos datos útiles nos han quedado para entrenar
+        fprintf('Datos útiles Temp: %d | Viento: %d | Prec: %d\n', ...
+            size(X_temp,1), size(X_viento,1), size(X_prec,1));
+
+        % -----------------------------------------------------------------
+        % En este punto ya tenemos nuestras matrices de caracteristicas y
+        % las salidas limpias de NaNs
+
         % En este punto ya tenemos nuestras matrices de caracteristicas y
         % las salidas
 
@@ -125,6 +159,3 @@ function entrenamiento()
         fprintf('\n[ERROR EN ENTRENAMIENTO]: %s\n', e.message);
     end
 end
-
-
-MIRAR LOS VALORES NAN, PONERLOS A CERO
