@@ -30,7 +30,7 @@
 
 function entrenamiento()
     disp('Iniciando el proceso de entrenamiento...');
-
+    
     try
         % 1. LECTURA DEL ARCHIVO
         % Usamos readlines para leer todo el archivo de golpe
@@ -125,3 +125,6 @@ function entrenamiento()
         fprintf('\n[ERROR EN ENTRENAMIENTO]: %s\n', e.message);
     end
 end
+
+
+MIRAR LOS VALORES NAN, PONERLOS A CERO
