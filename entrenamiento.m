@@ -153,6 +153,10 @@ function entrenamiento()
 
         % Podemos ver como se encuentran estos puntos en el espacio, ya que
         % ajustaremos un modelo polinómico
+
+
+        %..... entrenamiento ahora aqui
+
         save('Modelo.mat', 'X_temp', 'Y_temp', 'X_viento', 'Y_viento', 'X_prec', 'Y_prec', 'fechas_comunes', 'num_datos');
         
     catch e
