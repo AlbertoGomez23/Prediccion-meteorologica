@@ -134,19 +134,7 @@ function entrenamiento()
         filas_validas_viento = ~any(isnan([X_viento, Y_viento]), 2);
         X_viento = X_viento(filas_validas_viento, :);
         Y_viento = Y_viento(filas_validas_viento, :);
-
-        % ============================================================
-        % CORRECCIÓN DE UNIDADES DE VIENTO (AEMET REAL)
-        % En la recopilación de datos se multiplicó por 3.6 asumiendo m/s.
-        % Como el profesor indicó que los datos en crudo vienen en nudos:
-        
-        % 1. Deshacemos la multiplicación errónea para recuperar los nudos reales:
-        Y_viento = Y_viento / 3.6; 
-        
-        % 2. Convertimos los nudos a km/h (1 nudo = 1.852 km/h):
-        Y_viento = Y_viento * 1.852; 
-        % ============================================================
-        
+                
         % 3. Limpiamos Precipitación
         filas_validas_prec = ~any(isnan([X_prec, Y_prec]), 2);
         X_prec = X_prec(filas_validas_prec, :);
