@@ -72,10 +72,15 @@ function acumula_datos_diario()
                 fecha_str = dato.fint;
                 if ~ischar(fecha_str) && ~isstring(fecha_str), fecha_str = char(fecha_str); end
                 
-                % CONVERSIÓN A HORA LOCAL (+1 HORA) Y FORMATO LIMPIO
+                % CONVERSIÓN DE UTC A HORA LOCAL (MADRID)
                 try
-                    fecha_dt = datetime(fecha_str(1:19), 'InputFormat', 'yyyy-MM-dd''T''HH:mm:ss');
-                    fecha_dt = fecha_dt + hours(1); % Sumamos 1 hora para que coincida con la web
+                    % 1. Leemos la fecha y le decimos explícitamente que viene en UTC
+                    fecha_dt = datetime(fecha_str(1:19), 'InputFormat', 'yyyy-MM-dd''T''HH:mm:ss', 'TimeZone', 'UTC');
+                    
+                    % 2. La convertimos a la zona horaria de Madrid (automáticamente aplica +1 o +2)
+                    fecha_dt.TimeZone = 'Europe/Madrid';
+                    
+                    % 3. La guardamos como texto (ignorando el indicador de timezone para que cuadre con el resto)
                     fecha_str = datestr(fecha_dt, 'yyyy-mm-ddTHH:MM');
                 catch
                     % Si falla la conversión por algún motivo, dejamos un formato básico
