@@ -157,7 +157,32 @@ function entrenamiento()
 
         %..... entrenamiento ahora aqui
 
-        save('Modelo.mat', 'X_temp', 'Y_temp', 'X_viento', 'Y_viento', 'X_prec', 'Y_prec', 'fechas_comunes', 'num_datos');
+        % =========================================================================
+        % ENTRENAMIENTO MANUAL (Mediante Pseudo-inversa)
+        % =========================================================================
+        
+        % 1. TEMPERATURA
+        A_temp = [X_temp ones(size(X_temp, 1), 1)];
+        coefs_temp = pinv(A_temp) * Y_temp;  % aX1 + bX2 + c => a = coef de OM, b = coef de AEMET
+        y_temp_pred = A_temp * coefs_temp;
+
+        
+        % 2. VIENTO
+        A_viento = [X_viento ones(size(X_viento, 1), 1)];
+        coefs_viento = pinv(A_viento) * Y_viento; % Coefs diferentes a modelo_Viento, ya que ahi usamos robust on
+        y_viento_pred = A_viento * coefs_viento;
+        
+        % 3. PRECIPITACIÓN
+        A_prec = [X_prec ones(size(X_prec, 1), 1)];
+        coefs_prec = pinv(A_prec) * Y_prec; 
+        y_prec_pred = A_prec * coefs_prec;
+        
+        % Calculo de errores de entrenamiento
+        RMSE_temp = sqrt(sum((Y_temp - y_temp_pred).^2)/num_datos); % Sale mas o menos como el fitlm, solo que ahi el RMSE la division es entre N - p, siendo p el número de parametros, que son 3 (el intercepto, el peso de OM y el peso de AEMET)
+        RMSE_viento = sqrt(sum((Y_viento - y_viento_pred).^2)/num_datos); % Sale mas o menos como el fitlm, solo que ahi el RMSE la division es entre N - p, siendo p el número de parametros, que son 3 (el intercepto, el peso de OM y el peso de AEMET)        
+        RMSE_prec = sqrt(sum((Y_prec - y_prec_pred).^2)/num_datos); % Sale mas o menos como el fitlm, solo que ahi el RMSE la division es entre N - p, siendo p el número de parametros, que son 3 (el intercepto, el peso de OM y el peso de AEMET)
+
+        save('Modelo.mat', 'X_temp', 'Y_temp', 'X_viento', 'Y_viento', 'X_prec', 'Y_prec', 'fechas_comunes', 'num_datos', 'coefs_temp', 'coefs_viento', 'coefs_prec');
         
     catch e
         fprintf('\n[ERROR EN ENTRENAMIENTO]: %s\n', e.message);
