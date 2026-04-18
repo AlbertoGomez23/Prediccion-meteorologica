@@ -144,18 +144,13 @@ function entrenamiento()
         fprintf('Datos útiles Temp: %d | Viento: %d | Prec: %d\n', ...
             size(X_temp,1), size(X_viento,1), size(X_prec,1));
 
-        % -----------------------------------------------------------------
-        % En este punto ya tenemos nuestras matrices de caracteristicas y
-        % las salidas limpias de NaNs
+        % -----------------------------------------------------------------        
 
         % En este punto ya tenemos nuestras matrices de caracteristicas y
-        % las salidas
+        % las salidas limpios
 
         % Podemos ver como se encuentran estos puntos en el espacio, ya que
-        % ajustaremos un modelo polinómico
-
-
-        %..... entrenamiento ahora aqui
+        % ajustaremos un modelo polinómico => visualizacionDATOS
 
         % =========================================================================
         % ENTRENAMIENTO MANUAL (Mediante Pseudo-inversa)
@@ -181,6 +176,7 @@ function entrenamiento()
         RMSE_temp = sqrt(sum((Y_temp - y_temp_pred).^2)/num_datos); % Sale mas o menos como el fitlm, solo que ahi el RMSE la division es entre N - p, siendo p el número de parametros, que son 3 (el intercepto, el peso de OM y el peso de AEMET)
         RMSE_viento = sqrt(sum((Y_viento - y_viento_pred).^2)/num_datos); % Sale mas o menos como el fitlm, solo que ahi el RMSE la division es entre N - p, siendo p el número de parametros, que son 3 (el intercepto, el peso de OM y el peso de AEMET)        
         RMSE_prec = sqrt(sum((Y_prec - y_prec_pred).^2)/num_datos); % Sale mas o menos como el fitlm, solo que ahi el RMSE la division es entre N - p, siendo p el número de parametros, que son 3 (el intercepto, el peso de OM y el peso de AEMET)
+
 
         save('Modelo.mat', 'X_temp', 'Y_temp', 'X_viento', 'Y_viento', 'X_prec', 'Y_prec', 'fechas_comunes', 'num_datos', 'coefs_temp', 'coefs_viento', 'coefs_prec');
         
