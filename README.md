@@ -36,6 +36,8 @@ Se utilizan scripts en MATLAB automatizados para recolectar datos a través de A
 Para que el sistema funcione correctamente, se debe seguir este orden estricto de ejecución en MATLAB:
 
 ### Paso 1: Acumular datos (Recopilación)
+Antes de ejecutar nada, asegúrate de disponer de una API key válida de AEMET y guárdala en un archivo de texto llamado `api_aemet.txt` en el mismo directorio que los scripts.
+
 Ejecuta la función de recopilación varias veces durante varios días para generar una base de datos lo suficientemente grande. (Idealmente, esto se automatiza con el programador de tareas del Sistema Operativo).
 
 ```matlab
