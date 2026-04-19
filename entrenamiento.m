@@ -7,20 +7,10 @@
 % llamado 'Modelo.mat' que contiene los modelos entrenados y que será 
 % utilizado posteriormente por la función prediccion.m.
 % 
-% JUSTIFICACIÓN DEL DISEÑO (36h vs 48h):
-% Tras analizar la API de AEMET, se comprobó que el horizonte de predicción
-% horaria concurrente con Open-Meteo alcanza un máximo fiable de ~36-40h. 
-% Por ello, el modelo de Machine Learning se entrena para predecir las 
-% primeras 36 horas con alta precisión (fusionando AEMET y OM). Las horas 
-% 37 a 48 del fichero final se rellenarán utilizando la salida directa de 
-% Open-Meteo.
-%
 % FUNCIONAMIENTO:
 % 1. Obtiene los datos recopilados en 'historico.txt'.
 % 2. Filtra el histórico para extraer ÚNICAMENTE las predicciones (X) 
-%    generadas en las capturas de las 11:00 AM. Esto garantiza consistencia 
-%    en el horizonte temporal (aprox. 36 horas vista, cubriendo todo el 
-%    día actual y el siguiente completo).
+%    generadas en las capturas a la mañana (11 AM y 10 AM). 
 % 3. Busca el valor REAL (Y / Ground Truth) correspondiente a cada una de 
 %    esas horas predichas en el documento.
 % 4. Alinea los datos (Predicción OM, Predicción AEMET, Valor Real) 
@@ -46,16 +36,16 @@ function entrenamiento()
         preds_OM = containers.Map('KeyType', 'char', 'ValueType', 'any');
         preds_AEMET = containers.Map('KeyType', 'char', 'ValueType', 'any');
 
-        en_captura_11 = false;
+        en_captura = false;
 
         % 3. EXTRACCIÓN DE DATOS
         for i = 1:length(lineas)
             linea = strtrim(lineas(i)); % Elimina espacios iniciles y finales
             if isempty(linea), continue; end
 
-            % Detectamos si es una captura a de las 11:xx
+            % Detectamos si es una captura a de las 11:xx o 10:xx
             if startsWith(linea, '=== CAPTURA:')
-                en_captura_11 = contains(linea, '11:');
+                en_captura = contains(linea, {'11:', '10:'});
                 continue; % Si la linea es CAPTURA no la procesamos como datos
             end
 
@@ -67,8 +57,8 @@ function entrenamiento()
                 datos_reales(fch) = [str2double(partes(3)), str2double(partes(4)), str2double(partes(5))];
 
             % Extraemos predicciones solo si estamos en captura de las
-            % 11:00
-            elseif en_captura_11
+            % 11:00 o de las 10:00
+            elseif en_captura
                 if  startsWith(linea, 'PRED_OM')
                     partes = split(linea);                    
                     fch = char(partes(2));
@@ -173,12 +163,12 @@ function entrenamiento()
         y_prec_pred = A_prec * coefs_prec;
         
         % Calculo de errores de entrenamiento
-        RMSE_temp = sqrt(sum((Y_temp - y_temp_pred).^2)/num_datos); % Sale mas o menos como el fitlm, solo que ahi el RMSE la division es entre N - p, siendo p el número de parametros, que son 3 (el intercepto, el peso de OM y el peso de AEMET)
-        RMSE_viento = sqrt(sum((Y_viento - y_viento_pred).^2)/num_datos); % Sale mas o menos como el fitlm, solo que ahi el RMSE la division es entre N - p, siendo p el número de parametros, que son 3 (el intercepto, el peso de OM y el peso de AEMET)        
-        RMSE_prec = sqrt(sum((Y_prec - y_prec_pred).^2)/num_datos); % Sale mas o menos como el fitlm, solo que ahi el RMSE la division es entre N - p, siendo p el número de parametros, que son 3 (el intercepto, el peso de OM y el peso de AEMET)
+        RMSE_temp_train = sqrt(sum((Y_temp - y_temp_pred).^2)/ size(Y_temp, 1)); % Sale mas o menos como el fitlm, solo que ahi el RMSE la division es entre N - p, siendo p el número de parametros, que son 3 (el intercepto, el peso de OM y el peso de AEMET)
+        RMSE_viento_train = sqrt(sum((Y_viento - y_viento_pred).^2)/ size(Y_viento, 1)); % Sale mas o menos como el fitlm, solo que ahi el RMSE la division es entre N - p, siendo p el número de parametros, que son 3 (el intercepto, el peso de OM y el peso de AEMET)        
+        RMSE_prec_train = sqrt(sum((Y_prec - y_prec_pred).^2)/ size(Y_prec, 1)); % Sale mas o menos como el fitlm, solo que ahi el RMSE la division es entre N - p, siendo p el número de parametros, que son 3 (el intercepto, el peso de OM y el peso de AEMET)
 
 
-        save('Modelo.mat', 'X_temp', 'Y_temp', 'X_viento', 'Y_viento', 'X_prec', 'Y_prec', 'fechas_comunes', 'num_datos', 'coefs_temp', 'coefs_viento', 'coefs_prec');
+        save('Modelo.mat', 'X_temp', 'Y_temp', 'X_viento', 'Y_viento', 'X_prec', 'Y_prec', 'fechas_comunes', 'num_datos', 'coefs_temp', 'coefs_viento', 'coefs_prec','RMSE_temp_train', 'RMSE_viento_train', 'RMSE_prec_train');
         
     catch e
         fprintf('\n[ERROR EN ENTRENAMIENTO]: %s\n', e.message);
