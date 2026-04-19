@@ -24,7 +24,7 @@ function acumula_datos_diario()
     % =================================================================
     % 1. CONFIGURACIÓN INICIAL
     % =================================================================
-    api_key = 'TU_API_KEY_DE_AEMET'; 
+    api_key = strtrim(fileread('api_aemet.txt'));
     opciones_aemet = weboptions('HeaderFields', {'api_key', api_key}, 'Timeout', 30);
     opciones_texto = weboptions('ContentType', 'text', 'CharacterEncoding', 'UTF-8');
 

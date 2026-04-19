@@ -26,7 +26,7 @@ function prediccion()
         modelo = load('Modelo.mat');
         
         % 2. CONFIGURACIÓN DE LAS APIS
-        api_key = 'TU_API_KEY_DE_AEMET'; 
+        api_key = strtrim(fileread('api_aemet.txt'));
         opciones_aemet = weboptions('HeaderFields', {'api_key', api_key}, 'Timeout', 30);
         opciones_texto = weboptions('ContentType', 'text', 'CharacterEncoding', 'UTF-8');
         id_municipio = '11031'; % San Fernando
