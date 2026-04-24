@@ -1,4 +1,29 @@
 % =========================================================================
+% FUNCION: sacar_graficas_presentacion
+%
+% DESCRIPCION:
+% Este script es una herramienta interna y auxiliar diseñada exclusivamente
+% para automatizar la obtención de datos de los apartados C y D de la 
+% presentación de la práctica (presentacion.pptx). 
+% 
+% Calcula el error global (RMSE) y la degradación del error en bloques de 
+% 12 horas, comparando las predicciones pasadas de Open-Meteo, AEMET y 
+% el modelo propio contra los datos meteorológicos reales.
+%
+% FUNCIONAMIENTO (Backtesting):
+% 1. Carga el histórico ('historico.txt') y el modelo ('Modelo.mat').
+% 2. Viaja en el tiempo: enfrenta las predicciones que se guardaron en 
+%    su día con la realidad que acabó sucediendo.
+% 3. Muestra por consola los valores numéricos exactos de error (RMSE).
+% 4. Genera cuatro gráficas de barras listas para capturar y pegar en el PPT.
+%
+% ADVERTENCIA MUY IMPORTANTE:
+% Según las instrucciones de la práctica, este código NO DEBE INCLUIRSE 
+% en el archivo .zip final que se entrega. Es una herramienta personal 
+% de evaluación.
+% =========================================================================
+
+% =========================================================================
 % SCRIPT TEMPORAL PARA GENERAR GRÁFICAS DE LA PRESENTACIÓN (NO SE ENTREGA)
 % =========================================================================
 function sacar_graficas_presentacion()

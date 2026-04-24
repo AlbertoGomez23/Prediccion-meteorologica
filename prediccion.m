@@ -7,9 +7,10 @@
 %
 % FUNCIONAMIENTO:
 % 1. Carga el Modelo.mat
-% 2. Descarga los datos para realizar una predicción a 42 horas (de OM
-% descargamos a 48 ya que nuestra predicción real del modelo sera a 42 horas
-% ya que entrenamos con datos de predicciones de AEMET que llegan solo a 42
+% 2. Descarga los datos para realizar una predicción a 42/43 horas (de OM
+% descargamos a 48 ya que nuestra predicción real del modelo sera a 42/43 horas
+% ya que entrenamos con datos de predicciones de AEMET que llegan solo a
+% 42/43
 % horas, pero rellenaremos las restantes con predicciones de OM)
 % 3. Realiza la predicción
 % 4. Generamos el fichero miprediccion.txt con el formato que se pide
@@ -118,7 +119,7 @@ function prediccion()
         pred_final_P = zeros(1, 48);
 
         ultima_hora_aemet = ''; % <-- Variable para rastrear el corte hasta donde llega la predicción del modelo real
-        
+        horas_de_prediccion_reales = 0;
         % Calculamos qué hora es "ahora" redondeando hacia abajo
         t_actual = datetime('now', 'TimeZone', 'Europe/Madrid');
         t_actual.Minute = 0; t_actual.Second = 0;
@@ -128,7 +129,7 @@ function prediccion()
         
         for i = 1:48
             % Calculamos la fecha/hora objetivo (i horas en el futuro)
-            t_obj = t_actual + hours(i);
+            t_obj = t_actual + hours(i);            
             str_obj = datestr(t_obj, 'yyyy-mm-ddTHH:MM');
             
             % Buscamos el índice en Open-Meteo
@@ -145,6 +146,7 @@ function prediccion()
             
             % Comprobamos si AEMET llega a esta hora
             if isKey(map_aemet_t, str_obj)
+                horas_de_prediccion_reales = horas_de_prediccion_reales + 1;
                 ultima_hora_aemet = str_obj; % Asi sabremos hasta que hora llega nuestro modelo realmente
 
                 aemet_T = map_aemet_t(str_obj);
@@ -166,12 +168,14 @@ function prediccion()
                 pred_final_P(i) = om_P;
             end
         end
-
+        
         % Mostrar por pantalla el resultado del rastreo
         if ~isempty(ultima_hora_aemet)
             fprintf(' -> Modelo combinado aplicado con éxito.\n');
             fprintf(' -> Datos de AEMET disponibles hasta: %s\n', ultima_hora_aemet);
             fprintf(' -> El resto de horas se rellenaron con Open-Meteo puro.\n');
+            fprintf(" -> Hora hasta la que llega la predicción real de nuestro modelo (ya que la API de la AEMET no envia predicciones de 48 horas): %d\n", horas_de_prediccion_reales);
+
         else
             fprintf(' -> AVISO: No se encontraron datos de AEMET para combinar.\n');
         end
