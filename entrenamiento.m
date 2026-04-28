@@ -46,7 +46,7 @@ function entrenamiento()
             % Detectamos si es una captura a de las 11:xx o 10:xx o por la
             % mañana
             if startsWith(linea, '=== CAPTURA:')
-                en_captura = contains(linea, {'13:','12:', '11:', '10:', '9:'});
+                en_captura = contains(linea, {'16:', '13:','12:', '11:', '10:', '9:'});
                 continue; % Si la linea es CAPTURA no la procesamos como datos
             end
 
