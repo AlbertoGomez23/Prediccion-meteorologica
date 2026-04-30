@@ -29,11 +29,11 @@
 function sacar_graficas_presentacion()
     disp('Cargando datos e iniciando evaluación...');
     
-    if ~isfile('Modelo.mat') || ~isfile('historico.txt')
-        error('Falta Modelo.mat o historico.txt en la carpeta.');
+    if ~isfile('modelo.mat') || ~isfile('historico.txt')
+        error('Falta modelo.mat o historico.txt en la carpeta.');
     end
     
-    modelo = load('Modelo.mat');
+    modelo = load('modelo.mat');
     lineas = readlines('historico.txt');
     
     % 1. DICCIONARIO DE VERDAD ABSOLUTA (REAL)
@@ -42,8 +42,8 @@ function sacar_graficas_presentacion()
         linea = strtrim(lineas(i));
         if startsWith(linea, 'REAL')
             p = split(linea);
-            % Guardamos: [Temp, Viento, Prec] - Corrigiendo el viento a km/h reales
-            map_reales(char(p(2))) = [str2double(p(3)), (str2double(p(4))/3.6)*1.852, str2double(p(5))];
+            % Guardamos: [Temp, Viento, Prec]
+            map_reales(char(p(2))) = [str2double(p(3)), str2double(p(4)), str2double(p(5))];
         end
     end
     

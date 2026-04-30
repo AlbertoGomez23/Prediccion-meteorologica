@@ -21,10 +21,10 @@ function prediccion()
     
     try
         % 1. CARGAMOS EL MODELO
-        if ~isfile('Modelo.mat')
-            error('No se encuentra Modelo.mat. Ejecuta entrenamiento() primero.');
+        if ~isfile('modelo.mat')
+            error('No se encuentra modelo.mat. Ejecuta entrenamiento() primero.');
         end
-        modelo = load('Modelo.mat');
+        modelo = load('modelo.mat');
         
         % 2. CONFIGURACIÓN DE LAS APIS
         api_key = strtrim(fileread('api_aemet.txt'));

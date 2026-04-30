@@ -169,7 +169,7 @@ function entrenamiento()
         RMSE_prec_train = sqrt(sum((Y_prec - y_prec_pred).^2)/ size(Y_prec, 1)); % Sale mas o menos como el fitlm, solo que ahi el RMSE la division es entre N - p, siendo p el número de parametros, que son 3 (el intercepto, el peso de OM y el peso de AEMET)
 
 
-        save('Modelo.mat', 'X_temp', 'Y_temp', 'X_viento', 'Y_viento', 'X_prec', 'Y_prec', 'fechas_comunes', 'num_datos', 'coefs_temp', 'coefs_viento', 'coefs_prec','RMSE_temp_train', 'RMSE_viento_train', 'RMSE_prec_train');
+        save('modelo.mat', 'X_temp', 'Y_temp', 'X_viento', 'Y_viento', 'X_prec', 'Y_prec', 'fechas_comunes', 'num_datos', 'coefs_temp', 'coefs_viento', 'coefs_prec','RMSE_temp_train', 'RMSE_viento_train', 'RMSE_prec_train');
         
     catch e
         fprintf('\n[ERROR EN ENTRENAMIENTO]: %s\n', e.message);
