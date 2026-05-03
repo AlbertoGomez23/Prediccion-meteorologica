@@ -53,7 +53,7 @@ Una vez tengas suficientes datos en tu histórico (varios días de capturas), de
 entrenamiento()
 ```
 
-Esto leerá el histórico y generará un archivo llamado `Modelo.mat` que contiene los coeficientes entrenados para la Temperatura, Viento y Precipitación.
+Esto leerá el histórico y generará un archivo llamado `modelo.mat` que contiene los coeficientes entrenados para la Temperatura, Viento y Precipitación.
 
 ### Paso 3: Realizar una Predicción
 Con el modelo ya entrenado, puedes predecir las próximas 48 horas.
@@ -62,4 +62,4 @@ Con el modelo ya entrenado, puedes predecir las próximas 48 horas.
 prediccion()
 ```
 
-El script se descargará el tiempo actual, aplicará los coeficientes de `Modelo.mat` y generará un fichero llamado `miprediccion.txt` con el formato estándar de salida requerido.
+El script se descargará el tiempo actual, aplicará los coeficientes de `modelo.mat` y generará un fichero llamado `miprediccion.txt` con el formato estándar de salida requerido.
