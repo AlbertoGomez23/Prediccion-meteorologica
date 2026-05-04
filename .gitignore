@@ -13,3 +13,7 @@ visualizacionDATOS.m
 Modelo.mat
 miprediccion.txt
 api_aemet.txt
+Tu Modelo vs Realidad.png
+grafica_prediccion_vs_realidad.m
+miprediccionEntrega1.txt
+miprediccionEntrega2.txt
