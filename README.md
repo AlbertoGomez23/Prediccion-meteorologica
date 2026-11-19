@@ -1,65 +1,85 @@
-# Predicción Meteorológica - Machine Learning
+# Weather forecast correction with machine learning
 
-Este proyecto tiene como objetivo desarrollar un modelo predictivo capaz de mejorar las previsiones meteorológicas (temperatura, velocidad del viento y precipitación) a 48 horas vista en San Fernando (Cádiz), combinando datos reales y predicciones de diferentes fuentes mediante Machine Learning.
+This project builds a predictive model that improves the 48-hour weather
+forecasts (temperature, wind speed and precipitation) for San Fernando (Cádiz,
+Spain) by combining real observations and forecasts from different sources with
+machine learning.
 
-## Flujo de Trabajo
+## Workflow
 
-### 1. Captura de datos
-Se utilizan scripts en MATLAB automatizados para recolectar datos a través de APIs:
-- Datos meteorológicos reales de AEMET.
-- Predicciones meteorológicas de Open-Meteo.
-- Predicciones específicas de AEMET.
+### 1. Data collection
+Automated MATLAB scripts collect data through public APIs:
+- Real weather observations from AEMET (the Spanish State Meteorological Agency).
+- Weather forecasts from Open-Meteo.
+- Local forecasts from AEMET.
 
-### 2. Procesamiento
-- Sincronización de zonas horarias (UTC a Local).
-- Alineación de horas de predicción entre distintas APIs.
-- Limpieza de datos nulos (NaNs) y estructuración de series temporales en un histórico acumulado (`historico.txt`).
+### 2. Processing
+- Time zone synchronization (UTC to local time).
+- Alignment of forecast hours across the different APIs.
+- Cleaning of missing values (NaNs) and organization of the time series into a
+  cumulative history file (`historico.txt`).
 
-### 3. Entrenamiento (Regresión Lineal)
-- Uso de la pseudoinversa de Moore-Penrose para calcular los pesos óptimos de cada fuente (AEMET y Open-Meteo).
-- Entrenamiento del modelo usando las horas donde coinciden ambas APIs.
-- Guardado de los coeficientes en un archivo `.mat` para su uso futuro.
-
----
-
-## Archivos del Proyecto
-
-* `acumula_datos_diario.m`: Script encargado de conectarse a las APIs, descargar el tiempo actual y las previsiones, y añadir un bloque de texto al final de `historico.txt`.
-* `entrenamiento.m`: Lee el histórico, cruza los datos reales con lo que se predijo en el pasado, y entrena el modelo matemático. Genera el archivo `Modelo.mat`.
-* `prediccion.m`: Utiliza el modelo entrenado para generar el archivo `miprediccion.txt` con el pronóstico de las próximas 48 horas.
-* `historico.txt`: Base de datos en texto plano que actúa como memoria del sistema.
+### 3. Training (linear regression)
+- The Moore-Penrose pseudoinverse is used to compute the optimal weight of each
+  source (AEMET and Open-Meteo).
+- The model is trained on the hours where both APIs overlap.
+- The coefficients are saved to a `.mat` file for later use.
 
 ---
 
-## Cómo usar el código
+## Project files
 
-Para que el sistema funcione correctamente, se debe seguir este orden estricto de ejecución en MATLAB:
+* `acumula_datos_diario.m`: connects to the APIs, downloads the current weather
+  and the forecasts, and appends a new block to `historico.txt`.
+* `entrenamiento.m`: reads the history, matches the real observations with what
+  was forecast in the past, and trains the model. It generates `modelo.mat`.
+* `prediccion.m`: uses the trained model to generate `miprediccion.txt` with the
+  forecast for the next 48 hours.
+* `sacar_graficas_presentacion.m`: backtesting. It compares the past forecasts
+  of Open-Meteo, AEMET and the trained model against the real observations, with
+  the global RMSE and how the error grows in 12-hour blocks.
+* `historico.txt`: plain-text database that acts as the memory of the system.
 
-### Paso 1: Acumular datos (Recopilación)
-Antes de ejecutar nada, asegúrate de disponer de una API key válida de AEMET y guárdala en un archivo de texto llamado `api_aemet.txt` en el mismo directorio que los scripts.
+The code (identifiers and comments) is written in Spanish.
 
-Ejecuta la función de recopilación varias veces durante varios días para generar una base de datos lo suficientemente grande. (Idealmente, esto se automatiza con el programador de tareas del Sistema Operativo).
+---
+
+## How to use it
+
+The scripts must be run in MATLAB in this order:
+
+### Step 1: Collect data
+First, get a valid AEMET API key and save it in a text file called
+`api_aemet.txt` in the same folder as the scripts (the key is not included in
+the repository).
+
+Run the collection function several times over several days to build a large
+enough dataset (ideally, schedule it with the operating system's task
+scheduler).
 
 ```matlab
 acumula_datos_diario()
 ```
 
-Esto creará o actualizará el archivo `historico.txt`.
+This creates or updates `historico.txt`.
 
-### Paso 2: Entrenar el Modelo
-Una vez tengas suficientes datos en tu histórico (varios días de capturas), debes entrenar el modelo para que aprenda de los errores pasados de las APIs.
+### Step 2: Train the model
+Once the history contains enough data (several days of captures), train the
+model so it learns from the past errors of the APIs.
 
 ```matlab
 entrenamiento()
 ```
 
-Esto leerá el histórico y generará un archivo llamado `modelo.mat` que contiene los coeficientes entrenados para la Temperatura, Viento y Precipitación.
+This reads the history and generates `modelo.mat`, which contains the trained
+coefficients for temperature, wind and precipitation.
 
-### Paso 3: Realizar una Predicción
-Con el modelo ya entrenado, puedes predecir las próximas 48 horas.
+### Step 3: Make a forecast
+With the trained model, forecast the next 48 hours.
 
 ```matlab
 prediccion()
 ```
 
-El script se descargará el tiempo actual, aplicará los coeficientes de `modelo.mat` y generará un fichero llamado `miprediccion.txt` con el formato estándar de salida requerido.
+The script downloads the current weather, applies the coefficients in
+`modelo.mat` and writes `miprediccion.txt` with the forecast.
